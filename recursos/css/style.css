@@ -1,0 +1,282 @@
+/* =========================================
+   RESET BÁSICO Y FONDO GENERAL
+========================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f0f0f0; /* Gris muy clarito para el fondo general */
+    background-image: url('../img/fondoBody.avif');
+    color: #333;
+    padding: 20px;
+}
+
+/* =========================================
+   BLOQUE 1: CABECERA
+========================================= */
+.bloque-cabecera {
+    background-color: #000000; /* Azul claro */
+    border: 4px solid #004085; /* Borde azul oscuro */
+    padding: 30px 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.menu-navegacion {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+    background-color: #105095; /* Azul un poco más oscuro para diferenciar el menú */
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+.menu-navegacion a {
+    text-decoration: none;
+    color: #004085;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+}
+
+/* =========================================
+   BLOQUE 2: ZONA CENTRAL (MAIN) Y CATÁLOGO
+========================================= */
+.bloque-principal {
+    flex: 1;
+    padding: 40px;
+    margin-bottom: 20px;
+}
+
+.catalogo-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+/* Tarjetas de productos */
+.img-card {
+    width: 120px;
+    height: 200px;
+}
+
+.producto-card {
+    background-color:rgba(47, 43, 48, 0.945); /* Amarillo clarito */
+    border: 3px solid #ffffff; /* Borde marrón/mostaza */
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s;
+    color: white;
+}
+
+.producto-card:hover {
+    transform: scale(1.05);
+    background-color:#490443 /* Cambia un poco el amarillo al pasar el ratón */
+}
+
+/* =========================================
+   BLOQUE 3: PORTADA (INDEX.PHP) - HERO Y TARJETAS INFO
+========================================= */
+.hero-section {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: #cce5ff;
+    border: 4px solid #004085;
+    margin-bottom: 40px;
+    border-radius: 8px;
+}
+
+.hero-section h1 {
+    font-size: 2.5rem;
+    color: #004085;
+    margin-bottom: 20px;
+}
+
+.hero-section p {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 30px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-accion {
+    background-color: #004085;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    display: inline-block;
+    transition: background-color 0.3s;
+    border: none; /* Quitamos borde por defecto en botones form */
+    cursor: pointer; /* Añadimos cursor al botón form */
+}
+
+.btn-accion:hover {
+    background-color: #002752;
+}
+
+/* Cuadrícula de cómo funciona */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.info-card {
+    background-color: #d4edda;
+    border: 3px solid #155724;
+    padding: 30px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.info-card h3 {
+    color: #155724;
+    margin-bottom: 15px;
+}
+
+/* =========================================
+   BLOQUE 4: PIE DE PÁGINA (FOOTER)
+========================================= */
+.bloque-pie {
+    background-color: #000000; /* Morado claro */
+    border: 4px solid  #105095; /* Borde morado oscuro */
+    padding: 30px 20px;
+    text-align: center;
+    color: white;
+}
+
+/* =========================================
+   BLOQUE 5: FORMULARIOS (LOGIN/REGISTRO)
+========================================= */
+.contenedor-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Reducimos el padding general para centrar mejor la tarjeta */
+    padding: 20px; 
+}
+
+.tarjeta-login {
+    background-color: #ffffff; /* Blanco para destacar sobre el fondo verde */
+    border: 4px solid #004085; /* Borde azul para ir a juego con la marca */
+    padding: 40px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px; /* Ancho máximo para que no se estire mucho en PC */
+    text-align: center;
+}
+
+.tarjeta-login h2 {
+    color: #004085;
+    margin-bottom: 10px;
+}
+
+.tarjeta-login > p {
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.formulario-login {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.grupo-input {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.grupo-input label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.grupo-input input {
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.grupo-input input:focus {
+    border-color: #004085;
+    outline: none; /* Quita el borde azul por defecto del navegador */
+}
+
+.btn-login {
+    width: 100%; /* El botón ocupa todo el ancho de la tarjeta */
+    margin-top: 10px;
+}
+
+.enlace-registro {
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+.enlace-registro a {
+    color: #004085;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.enlace-registro a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================
+   DISEÑO RESPONSIVE (Móviles y Tablets)
+========================================= */
+@media (max-width: 1024px) {
+    .catalogo-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    /* Adaptación para la portada en tablets */
+    .info-grid {
+        grid-template-columns: 1fr; 
+    }
+}
+
+@media (max-width: 600px) {
+    .catalogo-grid {
+        grid-template-columns: 1fr;
+    }
+    .menu-navegacion {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .bloque-principal {
+        padding: 20px;
+    }
+    .tarjeta-login {
+        padding: 20px; /* Menos padding interior en móviles */
+    }
+}
