@@ -70,7 +70,7 @@
             </article>
             <article class="producto-card">
                 <img src="../recursos/img/jeronimo.jpg" alt="" class="img-card">
-                <h3>Jeronimo Stilton</h3>
+                <h3>Jeronimo Stilton el reino de la fantasia</h3>
                 <p>Precio: 1000 pts</p>
                 <form>
 					<button>Comprar</button>
@@ -93,8 +93,16 @@
 				</form>
             </article>
                 <article class="producto-card">
-                <img src="../recursos/img/anillos.jpg" alt="" class="img-card">
-                <h3>El señor de los anillos</h3>
+                <img src="../recursos/img/hansel.webp" alt="" class="img-card">
+                <h3>Hansel y Gretell</h3>
+                <p>Precio: 2200 pts</p>
+                <form>
+					<button>Comprar</button>
+				</form>
+            </article>
+                <article class="producto-card">
+                <img src="../recursos/img/odisea.webp" alt="" class="img-card">
+                <h3>La Odisea</h3>
                 <p>Precio: 2200 pts</p>
                 <form>
 					<button>Comprar</button>
@@ -102,55 +110,47 @@
             </article>
                 <article class="producto-card">
                 <img src="../recursos/img/anillos.jpg" alt="" class="img-card">
-                <h3>El señor de los anillos</h3>
+                <h3>Jeronimo Stilton la ultima aventura</h3>
                 <p>Precio: 2200 pts</p>
                 <form>
 					<button>Comprar</button>
 				</form>
             </article>
                 <article class="producto-card">
-                <img src="../recursos/img/anillos.jpg" alt="" class="img-card">
-                <h3>El señor de los anillos</h3>
+                <img src="../recursos/img/starwars.jpg" alt="" class="img-card">
+                <h3>Star wars</h3>
                 <p>Precio: 2200 pts</p>
                 <form>
 					<button>Comprar</button>
 				</form>
             </article>
                 <article class="producto-card">
-                <img src="../recursos/img/anillos.jpg" alt="" class="img-card">
-                <h3>El señor de los anillos</h3>
+                <img src="../recursos/img/dn.jpg" alt="" class="img-card">
+                <h3>Death Note 1</h3>
                 <p>Precio: 2200 pts</p>
                 <form>
 					<button>Comprar</button>
 				</form>
             </article>
                 <article class="producto-card">
-                <img src="../recursos/img/anillos.jpg" alt="" class="img-card">
-                <h3>El señor de los anillos</h3>
+                <img src="../recursos/img/19kamera.jpg" alt="" class="img-card">
+                <h3>19 Kamera</h3>
                 <p>Precio: 2200 pts</p>
                 <form>
 					<button>Comprar</button>
 				</form>
             </article>
                 <article class="producto-card">
-                <img src="../recursos/img/anillos.jpg" alt="" class="img-card">
-                <h3>El señor de los anillos</h3>
+                <img src="../recursos/img/bernarda.jpg" alt="" class="img-card">
+                <h3>La casa de Bernarda Alva</h3>
                 <p>Precio: 2200 pts</p>
                 <form>
 					<button>Comprar</button>
 				</form>
             </article>
                 <article class="producto-card">
-                <img src="../recursos/img/anillos.jpg" alt="" class="img-card">
-                <h3>El señor de los anillos</h3>
-                <p>Precio: 2200 pts</p>
-                <form>
-					<button>Comprar</button>
-				</form>
-            </article>
-                <article class="producto-card">
-                <img src="../recursos/img/anillos.jpg" alt="" class="img-card">
-                <h3>El señor de los anillos</h3>
+                <img src="../recursos/img/berserk.jpg" alt="" class="img-card">
+                <h3>Berserk 1</h3>
                 <p>Precio: 2200 pts</p>
                 <form>
 					<button>Comprar</button>
