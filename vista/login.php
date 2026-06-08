@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,36 +6,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lumina Play Store - Iniciar Sesión</title>
     <!-- Enlazamos tu CSS global -->
-    <link rel="stylesheet" href="recursos/css/style.css">
+    <link rel="stylesheet" href="../recursos/css/style.css">
+
+    <!-- Estilo de los mensajes de error (rojo) -->
+    <style>
+        .errores-login { margin-bottom: 1rem; }
+        .mensaje-error {
+            color: #c0392b;
+            background: #fdecea;
+            border: 1px solid #f5c6c0;
+            padding: .6rem .8rem;
+            border-radius: 8px;
+            margin: 0 0 .5rem;
+            font-size: .95rem;
+        }
+    </style>
 </head>
 <body>
-
    <header class="bloque-cabecera">
         <h2>Lumina Play Store</h2>
         <p>(Encabezado)</p>
         <nav>
             <ul class="menu-navegacion">
-                 <li><a href="index.php">Inicio</a></li>
+                 <li><a href="../index.php">Inicio</a></li>
                 <li><a href="videojuegos.php">Videojuegos</a></li>
                 <li><a href="libros.php">Libros</a></li>
-                <li><a href="#">Mi Saldo</a></li>
+                <li><a href="misaldo.php">Mi Saldo</a></li>
                 <li><a href="login.php">Login</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="bloque-principal contenedor-login">
-        
+
         <section class="tarjeta-login">
             <h2>Lumina Play Store</h2>
             <p>Inicia sesion para acceder a tu cuenta</p>
-            
+
+            <?php
+                // Mostramos los errores que dejó el controlador (si los hay)
+                if (!empty($_SESSION["errores"])) {
+                    echo '<div class="errores-login">';
+                    foreach ($_SESSION["errores"] as $error) {
+                        echo '<p class="mensaje-error">' . htmlspecialchars($error) . '</p>';
+                    }
+                    echo '</div>';
+                    unset($_SESSION["errores"]);   // se borran para que no salgan al recargar
+                }
+
+                // Recuperamos el nombre escrito para no obligar a reescribirlo
+                $old_nombre = $_SESSION["old_nombre"] ?? "";
+                unset($_SESSION["old_nombre"]);
+            ?>
+
             <!-- El atributo action enviará los datos a tu lógica PHP -->
-            <form action="logicaPhp/procesar_login.php" method="POST" class="formulario-login">
-                
+            <form action="../controlador/procesar_login.php" method="POST" class="formulario-login">
+
                 <div class="grupo-input">
-                    <label for="email">Correo Electrónico:</label>
-                    <input type="email" id="email" name="email" required placeholder="tu@email.com">
+                    <label for="nombre">Nombre de usuario:</label>
+                    <input type="text" id="nombre" name="nombre" required
+                           placeholder="nombre usuario"
+                           value="<?php echo htmlspecialchars($old_nombre); ?>">
                 </div>
 
                 <div class="grupo-input">
@@ -44,7 +76,7 @@
 
                 <button type="submit" class="btn-accion btn-login">Entrar</button>
             </form>
-            
+
             <p class="enlace-registro">¿No tienes cuenta? <a href="registro.php">Regístrate aquí</a></p>
         </section>
 
@@ -54,6 +86,5 @@
         <p>PIE DE PÁGINA</p>
         <p>Lumina Play Store © 2026 - Todos los derechos reservados</p>
     </footer>
-
 </body>
 </html>

@@ -87,7 +87,7 @@ body {
 
 .producto-card:hover {
     transform: scale(1.05);
-    background-color:#490443 /* Cambia un poco el amarillo al pasar el ratón */
+    background-color:#490443; /* Cambia un poco el amarillo al pasar el ratón */
 }
 
 /* =========================================
@@ -248,9 +248,8 @@ body {
     text-decoration: underline;
 }
 
-
 /* =========================================
-   DISEÑO RESPONSIVE (Móviles y Tablets)
+   DISEÑO RESPONSIVE GENERAL
 ========================================= */
 @media (max-width: 1024px) {
     .catalogo-grid {
@@ -279,4 +278,242 @@ body {
     .tarjeta-login {
         padding: 20px; /* Menos padding interior en móviles */
     }
+}
+
+/* =========================================
+   BLOQUE 6: ESTILOS DE LA PÁGINA DE INICIO (.home)
+========================================= */
+.home {
+    /* Paleta de colores simple y neutral */
+    --color-principal: #0056b3; /* Azul estándar */
+    --color-secundario: #333333; /* Gris oscuro para textos y banners (parecido a un footer) */
+    --fondo-gris: #f4f6f9;
+    --blanco: #ffffff;
+    --borde: #e0e0e0;
+    --texto-suave: #666666;
+
+    font-family: 'DM Sans', sans-serif;
+    color: var(--color-secundario);
+    background: var(--blanco);
+    padding: 0;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.home h1, .home h2, .home h3 {
+    margin: 0;
+    color: var(--color-secundario);
+}
+
+/* ---------- HERO SIMPLE ---------- */
+.home-hero {
+    background-color: var(--fondo-gris);
+    padding: 4rem 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid var(--borde);
+}
+.home-hero h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+.home-hero .resalte {
+    color: var(--color-principal);
+}
+.home-hero p {
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    color: var(--texto-suave);
+    font-size: 1.1rem;
+}
+.home-cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+.btn {
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.btn-primario {
+    background: var(--color-principal);
+    color: var(--blanco);
+    border: 2px solid var(--color-principal);
+}
+.btn-primario:hover {
+    background: #004494;
+    border-color: #004494;
+}
+.btn-secundario {
+    background: var(--blanco);
+    color: var(--color-secundario);
+    border: 2px solid var(--color-secundario);
+}
+.btn-secundario:hover {
+    background: var(--fondo-gris);
+}
+
+/* ---------- ESTRUCTURA SECCIONES ---------- */
+.home-seccion {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+}
+.seccion-header {
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--borde);
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.seccion-header h2 {
+    font-size: 1.8rem;
+}
+.enlace-ver-mas {
+    color: var(--color-principal);
+    text-decoration: none;
+    font-weight: bold;
+}
+.enlace-ver-mas:hover {
+    text-decoration: underline;
+}
+
+/* ---------- GRID DE PRODUCTOS ---------- */
+.grid-productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+.tarjeta-producto {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    padding: 1rem;
+    transition: box-shadow 0.2s;
+}
+.tarjeta-producto:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+/* Cajas de color sólido para simular portadas */
+.producto-visual {
+    height: 150px;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 3rem;
+}
+.visual-azul { background-color: #4a90e2; }
+.visual-rojo { background-color: #e24a4a; }
+.visual-verde { background-color: #4ae281; }
+.visual-morado { background-color: #a04ae2; }
+
+.tarjeta-producto h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+.producto-meta {
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+    margin-bottom: 1rem;
+}
+.producto-pie {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--borde);
+    padding-top: 1rem;
+}
+.producto-precio {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--color-principal);
+}
+.btn-canjear {
+    background: var(--color-secundario);
+    color: var(--blanco);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-canjear:hover {
+    background: #111;
+}
+
+/* ---------- BANNER SALDO (Estilo oscuro como un footer) ---------- */
+.info-wallet-banner {
+    background: var(--color-secundario);
+    color: var(--blanco);
+    border-radius: 8px;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.info-wallet-banner h3 {
+    color: var(--blanco);
+    margin-bottom: 0.5rem;
+}
+.info-wallet-banner p {
+    margin: 0;
+    color: #cccccc;
+}
+.wallet-badge {
+    background: var(--color-principal);
+    color: var(--blanco);
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* ---------- CATEGORÍAS ---------- */
+.grid-categorias {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+.panel-cat {
+    background: var(--fondo-gris);
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    text-decoration: none;
+    color: var(--color-secundario);
+    transition: border-color 0.2s;
+}
+.panel-cat:hover {
+    border-color: var(--color-principal);
+}
+.panel-cat h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+.btn-falso {
+    display: inline-block;
+    margin-top: 1rem;
+    background: var(--blanco);
+    border: 2px solid var(--color-principal);
+    color: var(--color-principal);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* ---------- RESPONSIVE MÓVIL (Específico Portada) ---------- */
+@media (max-width: 768px) {
+    .home-cta { flex-direction: column; }
+    .info-wallet-banner { flex-direction: column; text-align: center; gap: 1rem; }
+    .grid-categorias { grid-template-columns: 1fr; }
+    .seccion-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
 }

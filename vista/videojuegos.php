@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lumina Play Store - Wireframe a Color</title>
     <!-- Aquí enlazamos tu archivo CSS externo respetando tu estructura de carpetas -->
-    <link rel="stylesheet" href="recursos/css/style.css">
+    <link rel="stylesheet" href="../recursos/css/style.css">
 </head>
 <body>
 

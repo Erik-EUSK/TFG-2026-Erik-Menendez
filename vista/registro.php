@@ -11,10 +11,10 @@
         <p>(Encabezado)</p>
         <nav>
             <ul class="menu-navegacion">
-                <li><a href="index.php">Inicio</a></li>
+                <li><a href="../index.php">Inicio</a></li>
                 <li><a href="videojuegos.php">Videojuegos</a></li>
                 <li><a href="libros.php">Libros</a></li>
-                <li><a href="#">Mi Saldo</a></li>
+                <li><a href="misaldo.php">Mi Saldo</a></li>
                 <li><a href="login.php">Login</a></li>
             </ul>
         </nav>
