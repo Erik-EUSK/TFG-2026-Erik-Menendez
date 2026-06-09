@@ -24,10 +24,10 @@ $usuario = mysqli_fetch_assoc($resultado_user);
 $saldo_actual = $usuario['saldo_puntos'];
 mysqli_stmt_close($stmt_user);
 
-// 3. Obtenemos el historial real de compras de ESE usuario
-$sql_historial = "SELECT t.fecha_compra, p.titulo, t.puntos_gastados 
+// 3. Obtenemos el historial real de movimientos (compras con JOIN y recargas con LEFT JOIN)
+$sql_historial = "SELECT t.fecha_compra, p.titulo, t.puntos_gastados, t.id_producto 
                   FROM transacciones t 
-                  JOIN productos p ON t.id_producto = p.id 
+                  LEFT JOIN productos p ON t.id_producto = p.id 
                   WHERE t.id_usuario = ? 
                   ORDER BY t.fecha_compra DESC LIMIT 5";
 $stmt_hist = mysqli_prepare($bd, $sql_historial);
@@ -140,20 +140,29 @@ $historial = mysqli_stmt_get_result($stmt_hist);
                     <tbody>
                         <?php 
                         if (mysqli_num_rows($historial) > 0) {
-                            // Imprimimos el historial real del usuario
                             while ($fila = mysqli_fetch_assoc($historial)) {
                                 $fecha = date("d/m/Y", strtotime($fila['fecha_compra']));
-                                $titulo = $fila['titulo'];
-                                $puntos = number_format($fila['puntos_gastados'], 0, ',', '.');
+                                
+                                // Evaluamos si es una recarga (id_producto es NULL) o una compra
+                                if (is_null($fila['id_producto'])) {
+                                    $concepto = "Recarga de saldo";
+                                    $puntos = "+" . number_format($fila['puntos_gastados'], 0, ',', '.');
+                                    $color = "#1a7a3a"; // Verde para ingresos
+                                } else {
+                                    $titulo = $fila['titulo'];
+                                    $concepto = "Compra: $titulo";
+                                    $puntos = "-" . number_format($fila['puntos_gastados'], 0, ',', '.');
+                                    $color = "#b32424"; // Rojo para gastos
+                                }
                                 
                                 echo "<tr style='border-bottom:1px solid var(--borde);'>";
                                 echo "<td style='padding:0.8rem 0; color:var(--texto-suave);'>$fecha</td>";
-                                echo "<td style='padding:0.8rem 0;'>Compra: $titulo</td>";
-                                echo "<td style='padding:0.8rem 0; text-align:right; color:#b32424; font-weight:bold;'>-$puntos</td>";
+                                echo "<td style='padding:0.8rem 0;'>$concepto</td>";
+                                echo "<td style='padding:0.8rem 0; text-align:right; color:$color; font-weight:bold;'>$puntos</td>";
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='3' style='padding:1rem 0; text-align:center;'>Aún no has realizado ninguna compra.</td></tr>";
+                            echo "<tr><td colspan='3' style='padding:1rem 0; text-align:center;'>Aún no has realizado ningún movimiento.</td></tr>";
                         }
                         ?>
                     </tbody>
