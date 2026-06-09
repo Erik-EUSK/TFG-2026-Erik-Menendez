@@ -3,7 +3,7 @@
           <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Lumina Play Store - Wireframe a Color</title>     
-        <link rel="stylesheet" href="recursos/css/style.css">
+        <link rel="stylesheet" href="../recursos/css/style.css">
     </head>
     <body>
          <header class="bloque-cabecera">
@@ -23,18 +23,18 @@
         <section class="tarjeta-login">
             <h2>Crea una cuenta de Lumina Play Store</h2>
             <p>Ingrese sus datos a continuación</p>
-            <form action="logicaPhp/procesar_registro.php" method="POST" class="formulario-login">
+            <form action="../controlador/procesar_registro.php" method="POST" class="formulario-login">
                 <div class="grupo-input">
-                    <label for="">Nombre completo: </label>
-                    <input type="text"><br>
+                    <label for="">Nombre de usuario: </label>
+                    <input type="text" name = nombre><br>
                 </div>
                 <div class="grupo-input">
                       <label for="">Email: </label>
-                      <input type="text"><br>
+                      <input type="text" name="email"><br>
                 </div>
                 <div class="grupo-input">
                      <label for="">Contraseña</label>
-                    <input type="password">
+                    <input type="password" name = "password">
                 </div>
                 <button type="submit" class="btn-accion btn-login">Registrarse</button>
             </form>

@@ -44,7 +44,6 @@ body {
 
 .menu-navegacion a {
     text-decoration: none;
-    color: #004085;
     font-weight: bold;
     text-transform: uppercase;
     color: white;
@@ -72,7 +71,7 @@ body {
 }
 
 .producto-card {
-    background-color:rgba(47, 43, 48, 0.945); /* Amarillo clarito */
+    background-color:rgba(47, 43, 48, 0.945); /* Nota: El color real es oscuro, no amarillo */
     border: 3px solid #ffffff; /* Borde marrón/mostaza */
     aspect-ratio: 1 / 1;
     display: flex;
@@ -87,7 +86,7 @@ body {
 
 .producto-card:hover {
     transform: scale(1.05);
-    background-color:#490443; /* Cambia un poco el amarillo al pasar el ratón */
+    background-color:#490443; /* Cambia un poco al pasar el ratón */
 }
 
 /* =========================================
@@ -127,8 +126,8 @@ body {
     font-size: 1.1rem;
     display: inline-block;
     transition: background-color 0.3s;
-    border: none; /* Quitamos borde por defecto en botones form */
-    cursor: pointer; /* Añadimos cursor al botón form */
+    border: none;
+    cursor: pointer;
 }
 
 .btn-accion:hover {
@@ -174,7 +173,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Reducimos el padding general para centrar mejor la tarjeta */
     padding: 20px; 
 }
 
@@ -295,13 +293,10 @@ body {
     font-family: 'DM Sans', sans-serif;
     color: var(--color-secundario);
     background: var(--blanco);
-    padding: 0;
-    margin: 0;
     line-height: 1.5;
 }
 
 .home h1, .home h2, .home h3 {
-    margin: 0;
     color: var(--color-secundario);
 }
 
@@ -464,7 +459,6 @@ body {
     margin-bottom: 0.5rem;
 }
 .info-wallet-banner p {
-    margin: 0;
     color: #cccccc;
 }
 .wallet-badge {
