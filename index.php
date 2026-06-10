@@ -16,7 +16,9 @@ session_start();
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             max-width: 1000px;
-            margin: 0 auto;
+            margin: 20px auto;
+            width: 90%; /* Evita que en pantallas medianas se pegue a los bordes */
+            box-sizing: border-box;
         }
 
         /* Contenedor para las fotos */
@@ -30,8 +32,46 @@ session_start();
         .galeria-novedades img {
             width: 100%;       /* Ocupa el espacio disponible */
             height: 250px;     /* Altura fija para todas igual */
-            object-fit: cover; /* Corta la imagen para que no se deforme y rellene el espacio */
+            object-fit: cover; /* Corta la imagen para que no se deforme */
             border-radius: 8px;
+        }
+
+        /* Contenedor para los botones inferiores */
+        .contenedor-botones {
+            display: flex; 
+            gap: 15px; 
+            margin-top: 30px;
+        }
+
+        /* ========================================================
+           MEDIA QUERIES (REGLAS PARA MÓVILES Y PANTALLAS PEQUEÑAS)
+           ======================================================== */
+        @media (max-width: 768px) {
+            .contenedor-blanco {
+                padding: 20px; /* Reducimos el espacio interno en móviles */
+                margin: 10px auto;
+            }
+
+            .galeria-novedades {
+                flex-direction: column; /* Las fotos se ponen una debajo de otra */
+                gap: 10px;
+            }
+
+            .galeria-novedades img {
+                height: 200px; /* Un poco más bajas en el móvil para que no ocupen toda la pantalla */
+            }
+
+            .contenedor-botones {
+                flex-direction: column; /* Los botones se ponen uno debajo de otro */
+                gap: 10px;
+            }
+
+            .btn-accion {
+                display: block;
+                text-align: center; /* Centramos el texto dentro del botón */
+                width: 100%;       /* El botón ocupa todo el ancho disponible */
+                box-sizing: border-box;
+            }
         }
     </style>
 </head>
@@ -71,7 +111,8 @@ session_start();
                 </div>
             </section>
 
-            <div style="display: flex; gap: 15px; margin-top: 30px;">
+            <!-- He cambiado el estilo en línea por la clase .contenedor-botones -->
+            <div class="contenedor-botones">
                 <a href="vista/videojuegos.php" class="btn-accion">Ver Videojuegos</a>
                 <a href="vista/libros.php" class="btn-accion">Ver Libros</a>
             </div>

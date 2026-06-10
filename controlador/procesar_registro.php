@@ -1,87 +1,188 @@
 <?php
-// Iniciamos sesión para poder enviar los mensajes de error de vuelta al formulario
 session_start();
-
-// 1. Conexión corregida (añadidas comillas a los parámetros de texto)
-$bd = mysqli_connect("localhost", "root", "", "lumina_play_store");
-
-if (!$bd){
-    die("Error de conexión: " . mysqli_connect_error());
-}
-
-// 2. Cambiado de $_GET a $_POST (ya que tu formulario envía los datos por POST)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
-    // Recogemos los datos y limpiamos espacios vacíos con trim()
-    $nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : '';
-    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
-    $password = isset($_POST['password']) ? $_POST['password'] : '';
-
-    // ==========================================
-    // VALIDADORES SOLICITADOS
-    // ==========================================
-    
-    if (empty($nombre) || empty($email) || empty($password)) {
-        $_SESSION['error'] = "Todos los campos son obligatorios.";
-        header("Location: ../registro.php");
-        exit();
-    }
-
-    // Validación 1: Mínimo 5 caracteres
-    if (strlen($nombre) < 5) {
-        $_SESSION['error'] = "El nombre de usuario debe tener un mínimo de 5 caracteres.";
-        header("Location: ../registro.php");
-        exit();
-    }
-
-    // Validación 2: Solo letras (a-z, A-Z), números y espacios
-    if (!preg_match('/^[a-zA-Z0-9 ]+$/', $nombre)) {
-        $_SESSION['error'] = "El nombre solo puede contener letras, números y espacios.";
-        header("Location: ../registro.php");
-        exit();
-    }
-
-    // Encriptamos la contraseña por seguridad antes de guardarla
-    $password_encriptada = password_hash($password, PASSWORD_BCRYPT);
-
-    // ==========================================
-    // INSERCIÓN EN LA BASE DE DATOS
-    // ==========================================
-    
-    // Estructura limpia usando comodines (?) para proteger la consulta
-    $sql = "INSERT INTO usuarios (nombre, email, password, saldo_puntos, rol) VALUES (?, ?, ?, 0, 'usuario')";
-    
-    // Preparamos la consulta en el servidor
-    if ($stmt = mysqli_prepare($bd, $sql)) {
-        
-        // Vinculamos las variables correspondientes a los tres '?' ("sss" significa 3 strings)
-        mysqli_stmt_bind_param($stmt, "sss", $nombre, $email, $password_encriptada);
-        
-        // Ejecutamos la inserción
-        if (mysqli_stmt_execute($stmt)) {
-            // Si se guarda con éxito, cerramos todo y redirigimos a la página principal
-            mysqli_stmt_close($stmt);
-            mysqli_close($bd);
-            
-            header("Location: ../index.php");
-            exit();
-        } else {
-            $_SESSION['error'] = "Error al registrar en la base de datos: " . mysqli_error($bd);
-            header("Location: ../vista/registro.php");
-            exit();
-        }
-    }
-}
-
-// Cerramos la conexión si no se entró al bloque POST
-mysqli_close($bd);
 ?>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Procesando Registro...</title>
-</head>
-<body>
-    <p>Procesando los datos del registro...</p>
-</body>
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lumina Play Store - Registro</title>     
+        <link rel="stylesheet" href="../recursos/css/style.css">
+        <style>
+            .password-container {
+                position: relative;
+                display: flex;
+                align-items: center;
+            }
+            
+            .password-container input {
+                flex: 1;
+                padding-right: 40px;
+            }
+            
+            .toggle-password {
+                position: absolute;
+                right: 10px;
+                cursor: pointer;
+                font-size: 20px;
+                background: none;
+                border: none;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .toggle-password i {
+                font-style: normal;
+            }
+            
+            .error-message {
+                color: #c0392b;
+                background: #fdecea;
+                border: 1px solid #f5c6c0;
+                padding: .6rem .8rem;
+                border-radius: 8px;
+                margin-bottom: 1rem;
+                font-size: .95rem;
+            }
+            
+            .error-message p {
+                margin: 5px 0;
+            }
+            
+            .success-message {
+                color: #155724;
+                background: #d4edda;
+                border: 1px solid #c3e6cb;
+                padding: .6rem .8rem;
+                border-radius: 8px;
+                margin-bottom: 1rem;
+                font-size: .95rem;
+            }
+        </style>
+    </head>
+    <body>
+        <header class="bloque-cabecera">
+            <h2>Lumina Play Store</h2>
+            <p>(Encabezado)</p>
+            <nav>
+                <ul class="menu-navegacion">
+                    <li><a href="../index.php">Inicio</a></li>
+                    <li><a href="videojuegos.php">Videojuegos</a></li>
+                    <li><a href="libros.php">Libros</a></li>
+                    <li><a href="misaldo.php">Mi Saldo</a></li>
+                    
+                    <?php if (isset($_SESSION['usuario_id'])): ?>
+                        <li><a href="../controlador/logout.php" style="color: #ffcccc; font-weight: bold;">Cerrar Sesión</a></li>
+                    <?php else: ?>
+                        <li><a href="login.php">Login</a></li>
+                    <?php endif; ?>
+                </ul>
+            </nav>
+        </header>
+        
+        <main class="bloque-principal contenedor-login">
+            <section class="tarjeta-login">
+                <h2>Crea una cuenta de Lumina Play Store</h2>
+                <p>Ingrese sus datos a continuación</p>
+                
+                <?php
+                // Mostrar mensaje de éxito si existe
+                if (isset($_SESSION['mensaje_exito'])) {
+                    echo '<div class="success-message">' . htmlspecialchars($_SESSION['mensaje_exito']) . '</div>';
+                    unset($_SESSION['mensaje_exito']);
+                }
+                
+                // Mostrar errores si existen
+                if (!empty($_SESSION["errores_registro"])) {
+                    echo '<div class="error-message">';
+                    foreach ($_SESSION["errores_registro"] as $error) {
+                        echo '<p>❌ ' . htmlspecialchars($error) . '</p>';
+                    }
+                    echo '</div>';
+                    unset($_SESSION["errores_registro"]);
+                }
+                
+                // Recuperar valores antiguos
+                $old_nombre = $_SESSION["old_nombre"] ?? "";
+                $old_email = $_SESSION["old_email"] ?? "";
+                unset($_SESSION["old_nombre"]);
+                unset($_SESSION["old_email"]);
+                ?>
+                
+                <form action="../controlador/procesar_registro.php" method="POST" class="formulario-login">
+                    <div class="grupo-input">
+                        <label for="nombre">Nombre de usuario (mínimo 5 caracteres):</label>
+                        <input type="text" id="nombre" name="nombre" required
+                               value="<?php echo htmlspecialchars($old_nombre); ?>"
+                               placeholder="Ej: JuanPerez123">
+                        <small>Solo letras, números y espacios</small>
+                    </div>
+                    
+                    <div class="grupo-input">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required
+                               value="<?php echo htmlspecialchars($old_email); ?>"
+                               placeholder="tu@email.com">
+                    </div>
+                    
+                    <div class="grupo-input">
+                        <label for="password">Contraseña (mínimo 6 caracteres):</label>
+                        <div class="password-container">
+                            <input type="password" id="password" name="password" required>
+                            <button type="button" class="toggle-password" id="togglePassword">
+                                <i>👁️‍🗨️</i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="grupo-input">
+                        <label for="confirm_password">Confirmar Contraseña:</label>
+                        <div class="password-container">
+                            <input type="password" id="confirm_password" name="confirm_password" required>
+                            <button type="button" class="toggle-password" id="toggleConfirmPassword">
+                                <i>👁️‍🗨️</i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-accion btn-login">Registrarse</button>
+                </form>
+                
+                <p class="enlace-registro">¿Ya tienes cuenta? <a href="login.php">Inicia sesión aquí</a></p>
+            </section>
+        </main>
+        
+        <footer class="bloque-pie">
+            <p>Lumina Play Store © 2026 - Todos los derechos reservados</p>
+            <p>Síguenos!!!</p>
+        </footer>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Función para toggle de contraseña
+                function setupPasswordToggle(toggleId, inputId) {
+                    const toggleButton = document.getElementById(toggleId);
+                    const passwordInput = document.getElementById(inputId);
+                    
+                    if (toggleButton && passwordInput) {
+                        toggleButton.addEventListener('click', function() {
+                            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                            passwordInput.setAttribute('type', type);
+                            
+                            const icon = toggleButton.querySelector('i');
+                            if (type === 'text') {
+                                icon.textContent = '👁️';
+                            } else {
+                                icon.textContent = '👁️‍🗨️';
+                            }
+                        });
+                    }
+                }
+                
+                // Configurar ambos campos de contraseña
+                setupPasswordToggle('togglePassword', 'password');
+                setupPasswordToggle('toggleConfirmPassword', 'confirm_password');
+            });
+        </script>
+    </body>
 </html>

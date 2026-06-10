@@ -28,8 +28,9 @@ $productos = mysqli_query($bd, $sql_productos);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lumina Play Store - Admin</title>
     <link rel="stylesheet" href="../recursos/css/style.css">
+    <script src="../recursos/js/scripts.js" defer></script>
     <style>
-        body { background-color: #f4f7f6 !important; color: #333 !important; margin: 0; padding: 0; }
+        body { background-color: #f4f7f6 ; color: #333 ; margin: 0; padding: 0; }
         
         .admin-wrapper {
             max-width: 1200px;
@@ -52,7 +53,6 @@ $productos = mysqli_query($bd, $sql_productos);
         .boton-eliminar { background-color: #ff4d4d; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
         .boton-eliminar:hover { background-color: #cc0000; }
 
-        /* NUEVO: Estilo del botón volver */
         .btn-volver {
             display: inline-block;
             padding: 12px 25px;
@@ -69,6 +69,42 @@ $productos = mysqli_query($bd, $sql_productos);
         .etiqueta-rol { padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; }
         .rol-admin { background: #d4edda; color: #155724; }
         .rol-usuario { background: #e2e3e5; color: #383d41; }
+        
+        .input-stock {
+            width: 60px; 
+            padding: 6px; 
+            text-align: center; 
+            border: 1px solid #ccc; 
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        .btn-guardar-stock {
+            background-color: #2c3e50; 
+            color: white; 
+            border: none; 
+            padding: 6px 10px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .btn-guardar-stock:hover { background-color: #1a252f; }
+        
+        /* Estilo para indicadores de ordenamiento */
+        .tabla-admin th {
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .tabla-admin th span {
+            margin-left: 8px;
+            font-size: 12px;
+        }
+        
+        /* Animación para las filas al ordenar */
+        .tabla-admin tbody tr {
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -87,14 +123,26 @@ $productos = mysqli_query($bd, $sql_productos);
         <?php endif; ?>
 
         <section class="seccion-admin">
-            <h2>Usuarios (<?php echo mysqli_num_rows($usuarios); ?>)</h2>
+            <h2>Usuarios (<span id="totalUsuarios"><?php echo mysqli_num_rows($usuarios); ?></span>)</h2>
             <div class="contenedor-tabla">
-                <table class="tabla-admin">
+                <table class="tabla-admin" id="tablaUsuarios">
                     <thead>
-                        <tr><th>ID</th><th>Nombre</th><th>Email</th><th>Saldo</th><th>Rol</th><th>Registro</th><th>Acciones</th></tr>
+                        <tr>
+                            <th data-sortable="true">ID</th>
+                            <th data-sortable="true">Nombre</th>
+                            <th data-sortable="true">Email</th>
+                            <th data-sortable="true">Saldo</th>
+                            <th data-sortable="true">Rol</th>
+                            <th data-sortable="true">Registro</th>
+                            <th>Acciones</th>
+                        </tr>
                     </thead>
                     <tbody>
-                        <?php while ($u = mysqli_fetch_assoc($usuarios)): ?>
+                        <?php 
+                        // Resetear el puntero del resultado
+                        mysqli_data_seek($usuarios, 0);
+                        while ($u = mysqli_fetch_assoc($usuarios)): 
+                        ?>
                             <tr>
                                 <td><?php echo $u['id']; ?></td>
                                 <td><?php echo htmlspecialchars($u['nombre']); ?></td>
@@ -104,13 +152,15 @@ $productos = mysqli_query($bd, $sql_productos);
                                 <td><?php echo htmlspecialchars($u['fecha_registro']); ?></td>
                                 <td>
                                     <?php if ((int)$u['id'] !== (int)$_SESSION['usuario_id']): ?>
-                                       <form method="POST" action="../controlador/procesar_eliminar.php" onsubmit="return confirm('¿Eliminar?');">
+                                       <form method="POST" action="../controlador/procesar_eliminar.php" onsubmit="return confirm('¿Eliminar este usuario? Esta acción no se puede deshacer.');">
                                             <input type="hidden" name="tabla" value="usuarios"> 
                                             <input type="hidden" name="id" value="<?php echo $u['id']; ?>">
                                             <button type="submit" class="boton-eliminar">Eliminar</button>
                                         </form>
+                                    <?php else: ?>
+                                        <span style="color: #999;">(Tu cuenta)</span>
                                     <?php endif; ?>
-                                </td>
+                                 </td>
                             </tr>
                         <?php endwhile; ?>
                     </tbody>
@@ -119,23 +169,40 @@ $productos = mysqli_query($bd, $sql_productos);
         </section>
 
         <section class="seccion-admin">
-            <h2>Productos (<?php echo mysqli_num_rows($productos); ?>)</h2>
+            <h2>Productos (<span id="totalProductos"><?php echo mysqli_num_rows($productos); ?></span>)</h2>
             <div class="contenedor-tabla">
-                <table class="tabla-admin">
+                <table class="tabla-admin" id="tablaProductos">
                     <thead>
-                        <tr><th>ID</th><th>Título</th><th>Tipo</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Acciones</th></tr>
+                        <tr>
+                            <th data-sortable="true">ID</th>
+                            <th data-sortable="true">Título</th>
+                            <th data-sortable="true">Tipo</th>
+                            <th data-sortable="true">Categoría</th>
+                            <th data-sortable="true">Precio</th>
+                            <th data-sortable="true">Stock</th>
+                            <th>Acciones</th>
+                        </tr>
                     </thead>
                     <tbody>
-                        <?php while ($p = mysqli_fetch_assoc($productos)): ?>
+                        <?php 
+                        mysqli_data_seek($productos, 0);
+                        while ($p = mysqli_fetch_assoc($productos)): 
+                        ?>
                             <tr>
                                 <td><?php echo $p['id']; ?></td>
                                 <td><?php echo htmlspecialchars($p['titulo']); ?></td>
                                 <td><?php echo htmlspecialchars($p['tipo']); ?></td>
                                 <td><?php echo htmlspecialchars($p['categoria'] ?? '—'); ?></td>
                                 <td><?php echo number_format($p['precio_puntos'], 0, ',', '.'); ?></td>
-                                <td><?php echo $p['stock']; ?></td>
                                 <td>
-                                    <form method="POST" action="../controlador/procesar_eliminar.php" onsubmit="return confirm('¿Eliminar?');">
+                                    <form method="POST" action="../controlador/actualizar_stock.php" style="display: flex; gap: 5px; align-items: center;">
+                                        <input type="hidden" name="id" value="<?php echo $p['id']; ?>">
+                                        <input type="number" name="stock" value="<?php echo $p['stock']; ?>" min="0" class="input-stock">
+                                        <button type="submit" class="btn-guardar-stock" title="Guardar stock">✔</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form method="POST" action="../controlador/procesar_eliminar.php" onsubmit="return confirm('¿Eliminar este producto? Esta acción no se puede deshacer.');">
                                         <input type="hidden" name="tabla" value="productos"> 
                                         <input type="hidden" name="id" value="<?php echo $p['id']; ?>">
                                         <button type="submit" class="boton-eliminar">Eliminar</button>
@@ -157,5 +224,83 @@ $productos = mysqli_query($bd, $sql_productos);
     <footer style="text-align: center; padding: 20px; color: #888;">
         <p>Lumina Play Store · Administración</p>
     </footer>
+    
+    <script>
+        // Función específica para ordenar las tablas del admin
+        function setupAdminSorting() {
+            const tables = ['tablaUsuarios', 'tablaProductos'];
+            
+            tables.forEach(tableId => {
+                const table = document.getElementById(tableId);
+                if (!table) return;
+                
+                const headers = table.querySelectorAll('th[data-sortable="true"]');
+                const tbody = table.querySelector('tbody');
+                
+                headers.forEach((header, idx) => {
+                    // Crear indicador de orden si no existe
+                    if (!header.querySelector('.sort-indicator')) {
+                        const indicator = document.createElement('span');
+                        indicator.className = 'sort-indicator';
+                        indicator.textContent = ' ↕️';
+                        indicator.style.fontSize = '12px';
+                        header.appendChild(indicator);
+                    }
+                    
+                    header.addEventListener('click', () => {
+                        const columnIndex = Array.from(header.parentNode.children).indexOf(header);
+                        const currentDirection = header.getAttribute('data-sort-direction') || 'asc';
+                        const newDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+                        
+                        // Resetear todos los headers
+                        headers.forEach(h => {
+                            h.setAttribute('data-sort-direction', '');
+                            const ind = h.querySelector('.sort-indicator');
+                            if (ind) ind.textContent = ' ↕️';
+                        });
+                        
+                        // Establecer nueva dirección
+                        header.setAttribute('data-sort-direction', newDirection);
+                        const indicator = header.querySelector('.sort-indicator');
+                        if (indicator) {
+                            indicator.textContent = newDirection === 'asc' ? ' ↑' : ' ↓';
+                        }
+                        
+                        // Ordenar las filas
+                        const rows = Array.from(tbody.querySelectorAll('tr'));
+                        
+                        rows.sort((a, b) => {
+                            let aValue = a.children[columnIndex].textContent.trim();
+                            let bValue = b.children[columnIndex].textContent.trim();
+                            
+                            // Limpiar formato de números
+                            aValue = aValue.replace(/[.,]/g, '');
+                            bValue = bValue.replace(/[.,]/g, '');
+                            
+                            // Verificar si son números
+                            const aNum = parseFloat(aValue);
+                            const bNum = parseFloat(bValue);
+                            
+                            if (!isNaN(aNum) && !isNaN(bNum)) {
+                                return newDirection === 'asc' ? aNum - bNum : bNum - aNum;
+                            }
+                            
+                            // Ordenar texto
+                            const comparison = aValue.localeCompare(bValue, 'es');
+                            return newDirection === 'asc' ? comparison : -comparison;
+                        });
+                        
+                        // Reordenar el DOM
+                        rows.forEach(row => tbody.appendChild(row));
+                    });
+                });
+            });
+        }
+        
+        // Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function() {
+            setupAdminSorting();
+        });
+    </script>
 </body>
 </html>

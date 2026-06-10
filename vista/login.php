@@ -14,6 +14,7 @@ if (isset($_SESSION['usuario_id'])) {
     <title>Lumina Play Store - Iniciar Sesión</title>
     <!-- Enlazamos tu CSS global -->
     <link rel="stylesheet" href="../recursos/css/style.css">
+    <script src="../recursos/js/scripts.js" defer></script>
 
     <!-- Estilo de los mensajes de error (rojo) -->
     <style>
@@ -26,6 +27,33 @@ if (isset($_SESSION['usuario_id'])) {
             border-radius: 8px;
             margin: 0 0 .5rem;
             font-size: .95rem;
+        }
+        
+        /* Estilo para el campo de contraseña con ojo */
+        .password-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .password-container input {
+            flex: 1;
+            padding-right: 40px;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .toggle-password i {
+            font-style: normal;
         }
     </style>
 </head>
@@ -83,7 +111,12 @@ if (isset($_SESSION['usuario_id'])) {
 
                 <div class="grupo-input">
                     <label for="password">Contraseña:</label>
-                    <input type="password" id="password" name="password" required placeholder="********">
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" required placeholder="********">
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <i>👁️‍🗨️</i>
+                        </button>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn-accion btn-login">Entrar</button>
@@ -98,5 +131,27 @@ if (isset($_SESSION['usuario_id'])) {
         <p>PIE DE PÁGINA</p>
         <p>Lumina Play Store © 2026 - Todos los derechos reservados</p>
     </footer>
+    
+    <script>
+        // Inicializar el ojo para mostrar/ocultar contraseña en login
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            
+            if (togglePassword && passwordInput) {
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    const icon = togglePassword.querySelector('i');
+                    if (type === 'text') {
+                        icon.textContent = '👁️';
+                    } else {
+                        icon.textContent = '👁️‍🗨️';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
