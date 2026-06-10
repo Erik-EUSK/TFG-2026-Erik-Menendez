@@ -49,7 +49,8 @@ $usuario   = mysqli_fetch_assoc($resultado);
 // 4) Validar usuario + contraseña
 //    (Por seguridad damos UN solo mensaje genérico: no revelamos si falló
 //     el nombre o la contraseña, para no dar pistas a un atacante.)
-if ($usuario === null || $usuario["password"] !== $password) {
+// 4) Validar usuario + contraseña usando password_verify()
+if ($usuario === null || !password_verify($password, $usuario["password"])) {
     $_SESSION["errores"]    = ["Nombre o contraseña incorrectos."];
     $_SESSION["old_nombre"] = $nombre;
     header("Location: ../vista/login.php");
@@ -64,7 +65,7 @@ $_SESSION["rol"]        = $usuario["rol"];
 
 // 6) Redirigir según el rol
 if ($usuario["rol"] === "admin") {
-    header("Location: ../admin.php");
+    header("Location: ../vista/admin.php");
 } else {
     header("Location: ../index.php");
 }

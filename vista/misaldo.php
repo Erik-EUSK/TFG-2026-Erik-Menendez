@@ -24,10 +24,10 @@ $usuario = mysqli_fetch_assoc($resultado_user);
 $saldo_actual = $usuario['saldo_puntos'];
 mysqli_stmt_close($stmt_user);
 
-// 3. Obtenemos el historial real de movimientos (compras con JOIN y recargas con LEFT JOIN)
-$sql_historial = "SELECT t.fecha_compra, p.titulo, t.puntos_gastados, t.id_producto 
+// 3. Obtenemos el historial real de compras de ESE usuario
+$sql_historial = "SELECT t.fecha_compra, p.titulo, t.puntos_gastados 
                   FROM transacciones t 
-                  LEFT JOIN productos p ON t.id_producto = p.id 
+                  JOIN productos p ON t.id_producto = p.id 
                   WHERE t.id_usuario = ? 
                   ORDER BY t.fecha_compra DESC LIMIT 5";
 $stmt_hist = mysqli_prepare($bd, $sql_historial);
@@ -47,15 +47,20 @@ $historial = mysqli_stmt_get_result($stmt_hist);
     <header class="bloque-cabecera">
         <h2>Lumina Play Store</h2>
         <p>(Encabezado)</p>
-        <nav>
-            <ul class="menu-navegacion">
-                <li><a href="../index.php">Inicio</a></li>
-                <li><a href="videojuegos.php">Videojuegos</a></li>
-                <li><a href="libros.php">Libros</a></li>
-                <li><a href="misaldo.php">Mi Saldo</a></li>
-                <li><a href="perfil.php">Mi Perfil</a></li> 
-            </ul>
-        </nav>
+  <nav>
+    <ul class="menu-navegacion">
+        <li><a href="../index.php">Inicio</a></li>
+        <li><a href="videojuegos.php">Videojuegos</a></li>
+        <li><a href="libros.php">Libros</a></li>
+        <li><a href="misaldo.php">Mi Saldo</a></li>
+        
+        <?php if (isset($_SESSION['usuario_id'])): ?>
+            <li><a href="../controlador/logout.php" style="color: #ffcccc; font-weight: bold;">Cerrar Sesión</a></li>
+        <?php else: ?>
+            <li><a href="login.php">Login</a></li>
+        <?php endif; ?>
+    </ul>
+</nav>
     </header>
 
     <main class="bloque-principal">
@@ -69,6 +74,12 @@ $historial = mysqli_stmt_get_result($stmt_hist);
                     ?>
                 </div>
             <?php endif; ?>
+
+            <div class="seccion-header" style="border-bottom: none; margin-bottom: 1.5rem; padding-bottom: 0; text-align: center; width: 100%;">
+                <h2 style="font-size: 2.2rem; color: #004085; text-align: center; margin: 0 auto; display: inline-block;">
+                    ¡Hola, <?php echo htmlspecialchars($_SESSION['nombre'] ?? 'Usuario'); ?>! 👋
+                </h2>
+            </div>
 
             <section class="home-seccion">
                 <div class="info-wallet-banner">
@@ -140,29 +151,20 @@ $historial = mysqli_stmt_get_result($stmt_hist);
                     <tbody>
                         <?php 
                         if (mysqli_num_rows($historial) > 0) {
+                            // Imprimimos el historial real del usuario
                             while ($fila = mysqli_fetch_assoc($historial)) {
                                 $fecha = date("d/m/Y", strtotime($fila['fecha_compra']));
-                                
-                                // Evaluamos si es una recarga (id_producto es NULL) o una compra
-                                if (is_null($fila['id_producto'])) {
-                                    $concepto = "Recarga de saldo";
-                                    $puntos = "+" . number_format($fila['puntos_gastados'], 0, ',', '.');
-                                    $color = "#1a7a3a"; // Verde para ingresos
-                                } else {
-                                    $titulo = $fila['titulo'];
-                                    $concepto = "Compra: $titulo";
-                                    $puntos = "-" . number_format($fila['puntos_gastados'], 0, ',', '.');
-                                    $color = "#b32424"; // Rojo para gastos
-                                }
+                                $titulo = $fila['titulo'];
+                                $puntos = number_format($fila['puntos_gastados'], 0, ',', '.');
                                 
                                 echo "<tr style='border-bottom:1px solid var(--borde);'>";
                                 echo "<td style='padding:0.8rem 0; color:var(--texto-suave);'>$fecha</td>";
-                                echo "<td style='padding:0.8rem 0;'>$concepto</td>";
-                                echo "<td style='padding:0.8rem 0; text-align:right; color:$color; font-weight:bold;'>$puntos</td>";
+                                echo "<td style='padding:0.8rem 0;'>Compra: $titulo</td>";
+                                echo "<td style='padding:0.8rem 0; text-align:right; color:#b32424; font-weight:bold;'>-$puntos</td>";
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='3' style='padding:1rem 0; text-align:center;'>Aún no has realizado ningún movimiento.</td></tr>";
+                            echo "<tr><td colspan='3' style='padding:1rem 0; text-align:center;'>Aún no has realizado ninguna compra.</td></tr>";
                         }
                         ?>
                     </tbody>

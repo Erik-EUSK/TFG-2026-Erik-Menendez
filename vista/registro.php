@@ -9,15 +9,20 @@
          <header class="bloque-cabecera">
         <h2>Lumina Play Store</h2>
         <p>(Encabezado)</p>
-        <nav>
-            <ul class="menu-navegacion">
-                <li><a href="../index.php">Inicio</a></li>
-                <li><a href="videojuegos.php">Videojuegos</a></li>
-                <li><a href="libros.php">Libros</a></li>
-                <li><a href="misaldo.php">Mi Saldo</a></li>
-                <li><a href="login.php">Login</a></li>
-            </ul>
-        </nav>
+     <nav>
+    <ul class="menu-navegacion">
+        <li><a href="../index.php">Inicio</a></li>
+        <li><a href="videojuegos.php">Videojuegos</a></li>
+        <li><a href="libros.php">Libros</a></li>
+        <li><a href="misaldo.php">Mi Saldo</a></li>
+        
+        <?php if (isset($_SESSION['usuario_id'])): ?>
+            <li><a href="../controlador/logout.php" style="color: #ffcccc; font-weight: bold;">Cerrar Sesión</a></li>
+        <?php else: ?>
+            <li><a href="login.php">Login</a></li>
+        <?php endif; ?>
+    </ul>
+</nav>
     </header>
     <main class="bloque-principal contenedor-login">
         <section class="tarjeta-login">
